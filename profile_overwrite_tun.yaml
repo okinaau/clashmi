@@ -18,7 +18,7 @@ tun:
   auto-redirect-input-mark: 0
   auto-redirect-output-mark: 0
   loopback-address:
-    - 10.7.0.1
+    - 192.168.10.179
   strict-route: false
   route-address: []
   route-address-set: []
