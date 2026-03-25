@@ -10,7 +10,7 @@ tun:
   gso: false
   gso-max-size: 0
   inet4-address:
-    - 198.18.0.1/30
+    - 192.168.10.179/24
   inet6-address: []
   iproute2-table-index: 0
   iproute2-rule-index: 0
