@@ -11,7 +11,7 @@ tun:
   gso-max-size: 0
 
   inet4-address:
-    - 10.6.50.2/15
+    - 10.7.0.0/15
 
   inet6-address: []
 
@@ -23,9 +23,9 @@ tun:
   auto-redirect-output-mark: 0
 
   loopback-address:
-    - 10.6.50.1
+    - 10.7.0.1
 
-  strict-route: false
+  strict-route: true
 
   route-address: []
   route-address-set: []
