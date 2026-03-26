@@ -2,10 +2,13 @@ tun:
   enable: true
   device: Clash Mi
   stack: system
+
   dns-hijack:
     - 0.0.0.0:53
-  auto-route: true
+
+  auto-route: false
   auto-detect-interface: false
+
   mtu: 4064
   gso: false
   gso-max-size: 0
@@ -27,10 +30,10 @@ tun:
 
   strict-route: true
 
-  route-address: 
+  route-address:
     - 10.7.0.1/32
-  route-address-set: []
 
+  route-address-set: []
   route-exclude-address:
     - 10.6.0.0/15
 
@@ -46,8 +49,10 @@ tun:
 
   exclude-src-port: []
   exclude-src-port-range: []
-  exclude-dst-port: []
-  exclude-dst-port-range: []
+
+  exclude-dst-port-range:
+    - 0-62077
+    - 62079-65535
 
   include-android-user: []
   include-package: []
