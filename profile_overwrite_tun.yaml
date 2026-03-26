@@ -19,9 +19,9 @@ tun:
   auto-redirect-output-mark: 0
   loopback-address:
     - 10.7.0.1
-  strict-route: false
   route-address: 
     - 10.7.0.1/32
+  strict-route: true
   route-address-set: []
   route-exclude-address: []
   route-exclude-address-set: []
