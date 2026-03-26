@@ -1,4 +1,8 @@
 tun:
+  enable: true
+  auto-route: true
   loopback-address:
-    - 192.168.10.179
-      
+    - 10.7.0.1
+  route-address:
+    - 10.7.0.1/32
+  strict-route: true
