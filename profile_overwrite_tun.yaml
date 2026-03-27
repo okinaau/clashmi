@@ -1,6 +1,5 @@
 tun:
   enable: true
-  device: Clash Mi
   stack: system
 
   enhanced-mode: redir-host
@@ -8,23 +7,13 @@ tun:
   - any:53
 
   inet4-address:
-    - 10.7.0.2/15
+    - 10.7.0.2/30
   loopback-address:
     - 10.7.0.1
-  route-address:
-    - 10.7.0.0/30
-
-  route-exclude-address:
-    - 10.6.0.0/15
-    - 224.0.0.0/4
-  exclude-dst-port-range:
-    - 0:62077
-    - 62079:65535
 
   auto-route: true
   strict-route: false
-  auto-redirect: false
-  auto-detect-interface: false
+  auto-detect-interface: true
 
   rules:
   - DOMAIN-SUFFIX,local,DIRECT
@@ -46,26 +35,9 @@ tun:
   iproute2-rule-index: 0
   auto-redirect-input-mark: 0
   auto-redirect-output-mark: 0
-  route-address-set: []
-  route-exclude-address-set: []
-  include-interface: []
-  exclude-interface: []
-  include-uid: []
-  include-uid-range: []
-  exclude-uid: []
-  exclude-uid-range: []
-  exclude-src-port: []
-  exclude-src-port-range: []
-  include-android-user: []
-  include-package: []
-  exclude-package: []
   endpoint-independent-nat: false
   udp-timeout: 0
   disable-icmp-forwarding: false
   file-descriptor: 5
-  inet4-route-address: []
-  inet6-route-address: []
-  inet4-route-exclude-address: []
-  inet6-route-exclude-address: []
   recvmsgx: true
   sendmsgx: false
