@@ -9,7 +9,7 @@ tun:
   
   # 1. Assign the interface a helper IP (mimicking LocalDevVpn)
   inet4-address:
-    - 10.7.0.0/24
+    - 10.7.0.0/32
   
   # 2. Tell Clash to catch traffic for the target IP
   loopback-address:
