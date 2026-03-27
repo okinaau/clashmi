@@ -2,9 +2,9 @@ tun:
   enable: true
   device: Clash Mi
   stack: system
-
+  enhanced-mode: redir-host
   dns-hijack:
-  - 198.18.0.2:53
+  - any:53
 
   auto-route: true
   auto-detect-interface: false
