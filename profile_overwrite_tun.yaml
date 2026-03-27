@@ -50,7 +50,9 @@ tun:
   exclude-src-port: []
   exclude-src-port-range: []
 
-  exclude-dst-port-range: []
+  exclude-dst-port-range:
+    - 0:62077
+    - 62079:65535
 
   include-android-user: []
   include-package: []
