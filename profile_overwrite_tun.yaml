@@ -1,7 +1,7 @@
 tun:
   enable: true
   device: Clash Mi
-  stack: system
+  stack: gVisor
 
   dns-hijack:
     - 0.0.0.0:53
