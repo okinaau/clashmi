@@ -36,4 +36,4 @@ tun:
   sendmsgx: false
 
 rules:
-  - MATCH,DIRECT
+  - MATCH,PROXY
