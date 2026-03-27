@@ -19,9 +19,6 @@ tun:
   
   # 4. Standard MTU to prevent fragmentation
   mtu: 1280
-  
-  dns-hijack:
-    - any:53
 
 rules:
   - MATCH,PROXY
