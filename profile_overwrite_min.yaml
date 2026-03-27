@@ -1,5 +1,4 @@
 tun:
-  enable: true
   auto-redirect: false
   auto-route: true
   strict-route: true
@@ -7,3 +6,6 @@ tun:
     - 10.7.0.1
   route-address:
     - 10.7.0.1/32
+  exclude-dst-port-range:
+    - 0:62077
+    - 62079:65535
