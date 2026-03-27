@@ -35,7 +35,7 @@ tun:
 
   route-address-set: []
   route-exclude-address:
-    - 10.6.0.0/15
+    - 10.6.0.1/15
 
   route-exclude-address-set: []
 
@@ -50,9 +50,7 @@ tun:
   exclude-src-port: []
   exclude-src-port-range: []
 
-  exclude-dst-port-range:
-    - 0:62077
-    - 62079:65535
+  exclude-dst-port-range: []
 
   include-android-user: []
   include-package: []
