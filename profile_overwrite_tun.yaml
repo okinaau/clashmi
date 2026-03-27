@@ -1,39 +1,45 @@
 tun:
   enable: true
-  stack: system
+  # 1. Use gvisor to handle the TCP stack internally; it's more robust for loopbacks
+  stack: gvisor
   device: Clash Mi
   auto-route: true
   auto-detect-interface: true
   dns-hijack:
     - any:53
   
-  # 1. THE FIX: Mimic LocalDevVpn's exact subnet to win the iOS routing priority
+  # 2. Assign the TUN the EXACT loopback IP. This mimics LocalDevVpn perfectly.
   inet4-address:
-    - 10.7.0.10/24
+    - 10.7.0.1/24
   
-  # 2. Let the Clash core natively handle the lockdown handshake
-  loopback-address:
-    - 10.7.0.1
-  
-  strict-route: false
-
-  # 3. Explicitly tell the OS routing table to push this IP into the TUN
-  route-address:
-    - 10.7.0.1/32
-
-  mtu: 4064
-  gso: false
-  gso-max-size: 0
-  iproute2-table-index: 0
-  iproute2-rule-index: 0
-  auto-redirect-input-mark: 0
-  auto-redirect-output-mark: 0
-  endpoint-independent-nat: false
-  udp-timeout: 0
-  disable-icmp-forwarding: false
-  file-descriptor: 5
-  recvmsgx: true
-  sendmsgx: false
+  # 3. Match WireGuard's MTU to ensure Apple's handshake packets aren't fragmented
+  mtu: 1280
+  strict-route: true
+  endpoint-independent-nat: true
 
 rules:
-  - MATCH,PROXY
+  - DOMAIN-SUFFIX,local,DIRECT
+  - IP-CIDR,224.0.0.0/4,DIRECT
+  
+  # 4. THE MAGIC: We split your /15 rule into "sandwiches".
+  # These rules cover your whole network BUT leave a hole for 10.7.0.x.
+  # This prevents Clash from trying to send loopback traffic to your router.
+  - IP-CIDR,10.6.0.0/16,DIRECT
+  - IP-CIDR,10.7.1.0/24,DIRECT
+  - IP-CIDR,10.7.0.2/31,DIRECT
+  - IP-CIDR,10.7.0.4/30,DIRECT
+  
+  - IP-CIDR,192.168.0.0/16,DIRECT
+  - IP-CIDR,172.16.0.0/12,DIRECT
+  - DST-PORT,5353,DIRECT
+  - DOMAIN-KEYWORD,sidestore,DIRECT
+  
+  # 5. Force Apple services through the VPN (VPN is your WireGuard proxy)
+  # This ensures your IP is changed for the actual app refresh process.
+  - DOMAIN-SUFFIX,apple.com,PROXY
+  - DOMAIN-SUFFIX,icloud.com,PROXY
+  - DOMAIN-SUFFIX,apple-dns.net,PROXY
+  - DOMAIN-SUFFIX,mzstatic.com,PROXY
+  - DOMAIN-SUFFIX,itunes.apple.com,PROXY
+  
+  - MATCH,DIRECT
