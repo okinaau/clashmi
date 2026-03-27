@@ -17,11 +17,30 @@ tun:
   
   # 3. Force the OS to send 10.7.0.1 into this TUN interface
   route-address:
-    - 10.7.0.0/32
+    - 10.7.0.1/32
 
   mtu: 1280
   strict-route: false
   endpoint-independent-nat: true
 
 rules:
-  - MATCH,PROXY
+  # 4. HIGHEST PRIORITY: The Loopback Rule
+  # DIRECT + loopback-address = Clash handles this internally
+  - IP-CIDR,10.7.0.1/32,DIRECT
+
+  # 5. Your LAN (The broad /15 network)
+  - IP-CIDR,10.6.0.0/15,DIRECT
+  - IP-CIDR,192.168.0.0/16,DIRECT
+  - IP-CIDR,172.16.0.0/12,DIRECT
+  
+  - DOMAIN-SUFFIX,local,DIRECT
+  - DST-PORT,5353,DIRECT
+  - DOMAIN-KEYWORD,sidestore,DIRECT
+  
+  # 6. Apple VPN bypass (Keep these for the refresh session)
+  - DOMAIN-SUFFIX,apple.com,PROXY
+  - DOMAIN-SUFFIX,icloud.com,PROXY
+  - DOMAIN-SUFFIX,mzstatic.com,PROXY
+  - DOMAIN-SUFFIX,itunes.apple.com,PROXY
+  
+  - MATCH,DIRECT
