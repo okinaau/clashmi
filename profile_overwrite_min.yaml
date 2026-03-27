@@ -1,8 +1,9 @@
 tun:
   enable: true
+  auto-redirect: false
   auto-route: true
+  strict-route: true
   loopback-address:
     - 10.7.0.1
   route-address:
     - 10.7.0.1/32
-  strict-route: true
