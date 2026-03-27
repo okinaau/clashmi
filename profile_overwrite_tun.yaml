@@ -8,7 +8,7 @@ tun:
   
   # 1. Direct Ownership: We make the TUN interface OWN 10.7.0.1
   inet4-address:
-    - 10.7.0.1/32
+    - 10.7.0.0/32
   
   # 2. Explicit Loopback
   loopback-address:
