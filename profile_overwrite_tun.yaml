@@ -7,7 +7,6 @@ tun:
   dns-hijack:
     - any:53
   
-  # THE HOLY GRAIL: Exact replication of LocalDevVpn
   inet4-address:
     - 10.7.0.0/8
   
@@ -16,20 +15,21 @@ tun:
   
   strict-route: false
 
-  # Force ONLY the SideStore target IP into the tunnel
   route-address:
     - 10.7.0.1/32
 
-  # CRITICAL: Prevent the massive /8 subnet from hijacking your 10.6.0.1 router
+  # THE FIX: We exclude ONLY the 10.6.x.x half of your router's subnet.
+  # This keeps your internet working, but forces 10.7.0.1 into the VPN.
   route-exclude-address:
-    - 10.6.0.0/15
+    - 10.6.0.0/16
 
   mtu: 1280
   endpoint-independent-nat: true
 
 rules:
   - IP-CIDR,10.7.0.1/32,DIRECT
-  - IP-CIDR,10.6.0.0/15,DIRECT
+  # THE FIX: Match the new rule here too
+  - IP-CIDR,10.6.0.0/16,DIRECT
   - DOMAIN-KEYWORD,ani,PROXY
   - DOMAIN-SUFFIX,846969.xyz,PROXY
   - DOMAIN-SUFFIX,apple.com,PROXY
