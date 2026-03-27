@@ -7,13 +7,19 @@ tun:
   dns-hijack:
     - any:53
   
+  # 1. Break the Kernel Collision: 
+  # We move the TUN's actual interface IP entirely out of the 10.x.x.x range.
   inet4-address:
-    - 10.7.0.2/30
+    - 198.18.0.2/30
+  
+  # 2. Keep your required loopback IP untouched.
   loopback-address:
     - 10.7.0.1
   
   strict-route: false
 
+  # 3. Force iOS to inject ONLY this specific IP into the TUN, 
+  # bypassing the Wi-Fi's /15 blanket claim.
   route-address:
     - 10.7.0.1/32
 
@@ -34,7 +40,11 @@ tun:
 rules:
   - DOMAIN-SUFFIX,local,DIRECT
   - IP-CIDR,224.0.0.0/4,DIRECT
-  - IP-CIDR,10.0.0.0/8,DIRECT
+  
+  # 4. Remove the massive 10.0.0.0/8 rule. 
+  # Replace it with your exact LAN subnet so 10.7.0.1 doesn't get kicked out to Wi-Fi.
+  - IP-CIDR,10.6.0.0/15,DIRECT
+  
   - IP-CIDR,192.168.0.0/16,DIRECT
   - IP-CIDR,172.16.0.0/12,DIRECT
   - DST-PORT,5353,DIRECT
