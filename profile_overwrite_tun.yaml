@@ -1,63 +1,51 @@
 tun:
   enable: true
-  # 1. Use gvisor to handle the TCP stack internally; it's more robust for loopbacks
-  stack: gvisor
+  stack: system  # System stack is more reliable for SideStore's specific handshake
   device: Clash Mi
   auto-route: true
   auto-detect-interface: true
   dns-hijack:
     - any:53
   
-  # 2. Assign the TUN the EXACT loopback IP. This mimics LocalDevVpn perfectly.
+  # 1. THE FIX: Assign the TUN a completely different internal IP. 
+  # This prevents the "Interface vs Destination" conflict.
   inet4-address:
-    - 10.7.0.1/24
+    - 172.19.0.1/30
+  
+  # 2. This tells Clash: "If you see traffic for 10.7.0.1, hijack it."
   loopback-address:
     - 10.7.0.1
+  
+  # 3. This forces the iOS Routing Table to send 10.7.0.1 into this TUN interface.
   route-address:
     - 10.7.0.1/32
 
-
-  gso-max-size: 0
-  iproute2-table-index: 0
-  iproute2-rule-index: 0
-  auto-redirect-input-mark: 0
-  auto-redirect-output-mark: 0
-  udp-timeout: 0
-  disable-icmp-forwarding: false
-  file-descriptor: 5
-  recvmsgx: true
-  sendmsgx: false
-
-
-  # 3. Match WireGuard's MTU to ensure Apple's handshake packets aren't fragmented
   mtu: 1280
-  gso: false
-  strict-route: true
+  strict-route: false # False allows the loopback to 'reflect' properly
   endpoint-independent-nat: true
 
 rules:
-  - DOMAIN-SUFFIX,local,DIRECT
-  - IP-CIDR,224.0.0.0/4,DIRECT
-  
-  # 4. THE MAGIC: We split your /15 rule into "sandwiches".
-  # These rules cover your whole network BUT leave a hole for 10.7.0.x.
-  # This prevents Clash from trying to send loopback traffic to your router.
-  - IP-CIDR,10.6.0.0/16,DIRECT
-  - IP-CIDR,10.7.1.0/24,DIRECT
-  - IP-CIDR,10.7.0.2/31,DIRECT
-  - IP-CIDR,10.7.0.4/30,DIRECT
-  
+  # 4. RULE PRIORITY: We put the loopback logic at the VERY TOP.
+  # We tell Clash: "Treat 10.7.0.1 as a DIRECT connection." 
+  # In Clash, DIRECT + loopback-address = "Handle this internally."
+  - IP-CIDR,10.7.0.1/32,DIRECT
+
+  # 5. Handle your local network. 
+  # Since your network is 10.6.0.0/15, we cover it all BUT the rule above takes priority.
+  - IP-CIDR,10.6.0.0/15,DIRECT
   - IP-CIDR,192.168.0.0/16,DIRECT
   - IP-CIDR,172.16.0.0/12,DIRECT
+  
+  - DOMAIN-SUFFIX,local,DIRECT
   - DST-PORT,5353,DIRECT
   - DOMAIN-KEYWORD,sidestore,DIRECT
   
-  # 5. Force Apple services through the VPN (VPN is your WireGuard proxy)
-  # This ensures your IP is changed for the actual app refresh process.
+  # 6. APP REFRESH FIX: Force all Apple validation traffic through your PROXY.
+  # This changes your IP address to bypass ISP restrictions.
   - DOMAIN-SUFFIX,apple.com,PROXY
   - DOMAIN-SUFFIX,icloud.com,PROXY
-  - DOMAIN-SUFFIX,apple-dns.net,PROXY
   - DOMAIN-SUFFIX,mzstatic.com,PROXY
   - DOMAIN-SUFFIX,itunes.apple.com,PROXY
+  - DOMAIN-KEYWORD,apple-cloudkit,PROXY
   
   - MATCH,DIRECT
