@@ -15,7 +15,7 @@ tun:
     - 10.7.0.1
   
   # 3. Force iOS to prioritize this route over your Wi-Fi's /15
-  strict-route: true
+  strict-route: false
   
   # 4. Standard MTU to prevent fragmentation
   mtu: 1280
