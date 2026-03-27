@@ -31,7 +31,7 @@ tun:
   strict-route: false
 
   route-address:
-    - 10.7.0.1/32
+    - 10.7.0.0/30
 
   route-address-set: []
   route-exclude-address:
