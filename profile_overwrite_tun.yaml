@@ -35,7 +35,6 @@ tun:
 
   route-address-set: []
   route-exclude-address:
-    - 10.6.0.1/15
     - 224.0.0.0/4
 
   route-exclude-address-set: []
