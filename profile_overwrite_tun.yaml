@@ -7,19 +7,17 @@ tun:
   dns-hijack:
     - any:53
   
-  # 1. Break the Kernel Collision: 
-  # We move the TUN's actual interface IP entirely out of the 10.x.x.x range.
+  # 1. THE FIX: Mimic LocalDevVpn's exact subnet to win the iOS routing priority
   inet4-address:
-    - 198.18.0.2/30
+    - 10.7.0.10/24
   
-  # 2. Keep your required loopback IP untouched.
+  # 2. Let the Clash core natively handle the lockdown handshake
   loopback-address:
     - 10.7.0.1
   
   strict-route: false
 
-  # 3. Force iOS to inject ONLY this specific IP into the TUN, 
-  # bypassing the Wi-Fi's /15 blanket claim.
+  # 3. Explicitly tell the OS routing table to push this IP into the TUN
   route-address:
     - 10.7.0.1/32
 
@@ -41,15 +39,18 @@ rules:
   - DOMAIN-SUFFIX,local,DIRECT
   - IP-CIDR,224.0.0.0/4,DIRECT
   
-  # 4. Remove the massive 10.0.0.0/8 rule. 
-  # Replace it with your exact LAN subnet so 10.7.0.1 doesn't get kicked out to Wi-Fi.
-  - IP-CIDR,10.6.0.0/15,DIRECT
+  # 4. Tightly scoped home router rule instead of the hazardous 10.0.0.0/8
+  - IP-CIDR,10.6.0.0/15,DIRECT 
   
   - IP-CIDR,192.168.0.0/16,DIRECT
   - IP-CIDR,172.16.0.0/12,DIRECT
   - DST-PORT,5353,DIRECT
   - DOMAIN-KEYWORD,sidestore,DIRECT
+  
+  # 5. Apple services forced through the VPN to bypass your ISP
   - DOMAIN-SUFFIX,apple.com,PROXY
   - DOMAIN-SUFFIX,icloud.com,PROXY
   - DOMAIN-SUFFIX,apple-dns.net,PROXY
+  - DOMAIN-SUFFIX,mzstatic.com,PROXY
+  
   - MATCH,DIRECT
