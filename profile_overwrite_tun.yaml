@@ -24,17 +24,4 @@ tun:
     - any:53
 
 rules:
-  # 5. REMOVE the 10.0.0.0/8 rule if you had it. It's too greedy.
-  # We ONLY want your specific router range to be DIRECT.
-  - IP-CIDR,10.6.0.0/15,DIRECT
-  
-  # 6. Specifically keep the loopback inside the phone
-  - IP-CIDR,10.7.0.1/32,DIRECT
-  
-  # VPN rules for Apple (the part LocalDevVpn can't do)
-  - DOMAIN-SUFFIX,apple.com,PROXY
-  - DOMAIN-SUFFIX,icloud.com,PROXY
-  - DOMAIN-SUFFIX,mzstatic.com,PROXY
-  - DOMAIN-SUFFIX,itunes.apple.com,PROXY
-  
-  - MATCH,DIRECT
+  - MATCH,PROXY
