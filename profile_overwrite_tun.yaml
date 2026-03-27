@@ -9,7 +9,7 @@ tun:
   
   # 1. Assign the interface a helper IP (mimicking LocalDevVpn)
   inet4-address:
-    - 10.7.0.0/32
+    - 10.7.0.10/24
   
   # 2. Tell Clash to catch traffic for the target IP
   loopback-address:
@@ -17,7 +17,7 @@ tun:
   
   # 3. Force the OS to send 10.7.0.1 into this TUN interface
   route-address:
-    - 10.7.0.1/32
+    - 10.7.0.0/32
 
   mtu: 1280
   strict-route: false
