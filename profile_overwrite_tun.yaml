@@ -26,6 +26,19 @@ tun:
   auto-redirect: false
   auto-detect-interface: false
 
+  rules:
+  - DOMAIN-SUFFIX,local,DIRECT
+  - IP-CIDR,224.0.0.0/4,DIRECT
+  - IP-CIDR,10.0.0.0/8,DIRECT
+  - IP-CIDR,192.168.0.0/16,DIRECT
+  - IP-CIDR,172.16.0.0/12,DIRECT
+  - DST-PORT,5353,DIRECT
+  - DOMAIN-KEYWORD,sidestore,DIRECT
+  - DOMAIN-SUFFIX,apple.com,PROXY
+  - DOMAIN-SUFFIX,icloud.com,PROXY
+  - DOMAIN-SUFFIX,apple-dns.net,PROXY
+  - MATCH,DIRECT
+
   mtu: 4064
   gso: false
   gso-max-size: 0
