@@ -6,7 +6,7 @@ tun:
   dns-hijack:
     - 0.0.0.0:53
 
-  auto-route: true
+  auto-route: false
   auto-detect-interface: false
 
   mtu: 4064
