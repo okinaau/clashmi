@@ -7,33 +7,39 @@ tun:
   dns-hijack:
     - any:53
   
+  # 1. Shrink the interface range so it doesn't overlap your 10.6.0.1/15
+  # We use a tiny /30 range that only contains .1 and .2
   inet4-address:
-    - 10.7.0.0/8
+    - 10.7.0.2/30
   
+  # 2. Explicitly define the loopback
   loopback-address:
     - 10.7.0.1
   
-  strict-route: false
-
+  # 3. Tell the iOS routing table to ONLY send this one IP to Clash
+  # This mimics exactly what a 'Direct' tunnel does
   route-address:
     - 10.7.0.1/32
 
-  # THE FIX: We exclude ONLY the 10.6.x.x half of your router's subnet.
-  # This keeps your internet working, but forces 10.7.0.1 into the VPN.
-  route-exclude-address:
-    - 10.6.0.0/16
+  # 4. REMOVE route-exclude-address entirely. 
+  # If we exclude 10.6.0.0/15, we might be telling Clash to ignore the 
+  # very subnet it needs to talk to for the loopback.
 
   mtu: 1280
+  strict-route: false
   endpoint-independent-nat: true
 
 rules:
+  # This MUST be the first rule.
   - IP-CIDR,10.7.0.1/32,DIRECT
-  # THE FIX: Match the new rule here too
-  - IP-CIDR,10.6.0.0/16,DIRECT
+  
+  # This ensures your phone can still talk to your router for internet
+  - IP-CIDR,10.6.0.0/15,DIRECT
+  
+  # Your VPN rules
   - DOMAIN-KEYWORD,ani,PROXY
   - DOMAIN-SUFFIX,846969.xyz,PROXY
   - DOMAIN-SUFFIX,apple.com,PROXY
   - DOMAIN-SUFFIX,icloud.com,PROXY
-  - DOMAIN-SUFFIX,mzstatic.com,PROXY
-  - DOMAIN-SUFFIX,itunes.apple.com,PROXY
+  
   - MATCH,DIRECT
