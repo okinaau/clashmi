@@ -28,7 +28,7 @@ tun:
   loopback-address:
     - 10.7.0.1
 
-  strict-route: true
+  strict-route: false
 
   route-address:
     - 10.7.0.1/32
