@@ -2,74 +2,57 @@ tun:
   enable: true
   device: Clash Mi
   stack: system
+
   enhanced-mode: redir-host
   dns-hijack:
   - any:53
 
+  inet4-address:
+    - 10.7.0.2/15
+  loopback-address:
+    - 10.7.0.1
+  route-address:
+    - 10.7.0.0/30
+
+  route-exclude-address:
+    - 10.6.0.0/15
+    - 224.0.0.0/4
+  exclude-dst-port-range:
+    - 0:62077
+    - 62079:65535
+
   auto-route: true
+  strict-route: false
+  auto-redirect: false
   auto-detect-interface: false
 
   mtu: 4064
   gso: false
   gso-max-size: 0
-
-  inet4-address:
-    - 10.7.0.2/15
-
-  inet6-address: []
-
   iproute2-table-index: 0
   iproute2-rule-index: 0
-
-  auto-redirect: false
   auto-redirect-input-mark: 0
   auto-redirect-output-mark: 0
-
-  loopback-address:
-    - 10.7.0.1
-
-  strict-route: false
-
-  route-address:
-    - 10.7.0.0/30
-
   route-address-set: []
-  route-exclude-address:
-    - 10.6.0.0/15
-    - 224.0.0.0/4
-
   route-exclude-address-set: []
-
   include-interface: []
   exclude-interface: []
-
   include-uid: []
   include-uid-range: []
   exclude-uid: []
   exclude-uid-range: []
-
   exclude-src-port: []
   exclude-src-port-range: []
-
-  exclude-dst-port-range:
-    - 0:62077
-    - 62079:65535
-
   include-android-user: []
   include-package: []
   exclude-package: []
-
   endpoint-independent-nat: false
   udp-timeout: 0
   disable-icmp-forwarding: false
-
   file-descriptor: 5
-
   inet4-route-address: []
   inet6-route-address: []
-
   inet4-route-exclude-address: []
   inet6-route-exclude-address: []
-
   recvmsgx: true
   sendmsgx: false
