@@ -3,8 +3,7 @@ tun:
   device: Clash Mi
   stack: system
 
-  dns-hijack:
-    - 0.0.0.0:53
+  dns-hijack: []
 
   auto-route: true
   auto-detect-interface: false
