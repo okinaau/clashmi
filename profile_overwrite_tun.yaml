@@ -36,21 +36,4 @@ tun:
   sendmsgx: false
 
 rules:
-  - DOMAIN-SUFFIX,local,DIRECT
-  - IP-CIDR,224.0.0.0/4,DIRECT
-  
-  # 4. Tightly scoped home router rule instead of the hazardous 10.0.0.0/8
-  - IP-CIDR,10.6.0.0/15,DIRECT 
-  
-  - IP-CIDR,192.168.0.0/16,DIRECT
-  - IP-CIDR,172.16.0.0/12,DIRECT
-  - DST-PORT,5353,DIRECT
-  - DOMAIN-KEYWORD,sidestore,DIRECT
-  
-  # 5. Apple services forced through the VPN to bypass your ISP
-  - DOMAIN-SUFFIX,apple.com,PROXY
-  - DOMAIN-SUFFIX,icloud.com,PROXY
-  - DOMAIN-SUFFIX,apple-dns.net,PROXY
-  - DOMAIN-SUFFIX,mzstatic.com,PROXY
-  
   - MATCH,DIRECT
