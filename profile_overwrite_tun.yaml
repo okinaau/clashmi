@@ -6,7 +6,7 @@ tun:
   dns-hijack:
     - 0.0.0.0:53
 
-  auto-route: false
+  auto-route: true
   auto-detect-interface: false
 
   mtu: 4064
@@ -28,7 +28,7 @@ tun:
   loopback-address:
     - 10.7.0.1
 
-  strict-route: false
+  strict-route: true
 
   route-address:
     - 10.7.0.1/32
