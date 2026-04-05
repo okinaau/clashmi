@@ -1,50 +1,49 @@
-dns:
-  enable: true
-  listen: :53
-  ipv6: false
-  enhanced-mode: fake-ip
-  fake-ip-range: 198.18.0.1/16
-  # IMPORTANT: Prevent Clash from ever trying to resolve or hijack the loopback IP
-  fake-ip-filter:
-    - "10.7.0.1"
-    - "+.lan"
-    - "+.local"
-
 tun:
   enable: true
-  stack: system
   device: Clash Mi
+  stack: gVisor
+  dns-hijack:
+    - 0.0.0.0:53
   auto-route: true
-  auto-detect-interface: true
-  
-  # TRICK: Set the TUN's own internal IP to a 172 range.
-  # This prevents the '10.x.x.x' conflict with your router.
+  auto-detect-interface: false
+  mtu: 4064
+  gso: false
+  gso-max-size: 0
   inet4-address:
-    - 172.19.0.1/30
-  
-  # Explicitly tell the TUN to host the SideStore IP
+    - 198.18.0.1/30
+  inet6-address: []
+  iproute2-table-index: 0
+  iproute2-rule-index: 0
+  auto-redirect: false
+  auto-redirect-input-mark: 0
+  auto-redirect-output-mark: 0
   loopback-address:
     - 10.7.0.1
-  
-  # Pluck ONLY the loopback IP into the tunnel's routing
-  route-address:
-    - 10.7.0.1/32
-
-  # Ensure the rest of your 10.6.x.x network is left alone by the system kernel
   strict-route: false
-  mtu: 1280
-
-rules:
-  # 1. SideStore Loopback (Must be DIRECT to stay on the device)
-  - IP-CIDR,10.7.0.1/32,DIRECT
-  
-  # 2. Bypass your local router subnet
-  - IP-CIDR,10.6.0.0/15,DIRECT
-  
-  # 3. Proxy Apple services through ProtonVPN
-  - DOMAIN-SUFFIX,apple.com,PROXY
-  - DOMAIN-SUFFIX,icloud.com,PROXY
-  - DOMAIN-SUFFIX,mzstatic.com,PROXY
-  - DOMAIN-SUFFIX,itunes.apple.com,PROXY
-  
-  - MATCH,DIRECT
+  route-address: []
+  route-address-set: []
+  route-exclude-address: []
+  route-exclude-address-set: []
+  include-interface: []
+  exclude-interface: []
+  include-uid: []
+  include-uid-range: []
+  exclude-uid: []
+  exclude-uid-range: []
+  exclude-src-port: []
+  exclude-src-port-range: []
+  exclude-dst-port: []
+  exclude-dst-port-range: []
+  include-android-user: []
+  include-package: []
+  exclude-package: []
+  endpoint-independent-nat: false
+  udp-timeout: 0
+  disable-icmp-forwarding: false
+  file-descriptor: 5
+  inet4-route-address: []
+  inet6-route-address: []
+  inet4-route-exclude-address: []
+  inet6-route-exclude-address: []
+  recvmsgx: true
+  sendmsgx: false
